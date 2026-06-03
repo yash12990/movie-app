@@ -1,23 +1,85 @@
-import { Button } from "@/components/ui/button";
+import {
+  getComingSoon,
+  getHeroMovies,
+  getNowShowing,
+  getOffers,
+  getRecommended,
+  getTheatres,
+} from "@/lib/data";
+import { SITE } from "@/lib/constants";
+import { JsonLd } from "@/components/shared/json-ld";
+import { HeroCarousel } from "@/components/sections/hero-carousel";
+import { MoviesSection } from "@/components/sections/movies-section";
+import { RecommendedCarousel } from "@/components/sections/recommended-carousel";
+import { BrowseByLanguage } from "@/components/sections/browse-by-language";
+import { BrowseByGenre } from "@/components/sections/browse-by-genre";
+import { FeaturedTheatres } from "@/components/sections/featured-theatres";
+import { OffersSection } from "@/components/sections/offers-section";
+import { DownloadApp } from "@/components/sections/download-app";
 
-export default function Home() {
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+export default async function HomePage() {
+  // Fetch every rail in parallel on the server.
+  const [heroMovies, nowShowing, comingSoon, recommended, theatres, offers] =
+    await Promise.all([
+      getHeroMovies(),
+      getNowShowing(),
+      getComingSoon(),
+      getRecommended(),
+      getTheatres(),
+      getOffers(),
+    ]);
+
+  // Structured data for richer search results.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        name: SITE.name,
+        url: siteUrl,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${siteUrl}/search?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+      {
+        "@type": "ItemList",
+        name: "Now Showing",
+        itemListElement: nowShowing.slice(0, 10).map((m, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "Movie",
+            name: m.title,
+            genre: m.genres,
+            inLanguage: m.languages,
+            url: `${siteUrl}/movies/${m.slug}`,
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: m.rating,
+              bestRating: 10,
+              ratingCount: m.votes,
+            },
+          },
+        })),
+      },
+    ],
+  };
+
   return (
-    <main className="flex flex-1 flex-col items-center justify-center px-6 py-24 text-center">
-      <span className="mb-4 rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-        Now booking
-      </span>
-      <h1 className="font-heading text-4xl font-semibold tracking-tight sm:text-6xl">
-        Book the movies you love.
-      </h1>
-      <p className="mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
-        Discover the latest releases, pick your seats, and check out in seconds.
-      </p>
-      <div className="mt-8 flex gap-3">
-        <Button size="lg">Browse movies</Button>
-        <Button size="lg" variant="outline">
-          How it works
-        </Button>
-      </div>
+    <main id="main" className="flex-1">
+      <JsonLd data={jsonLd} />
+      <HeroCarousel movies={heroMovies} />
+      <MoviesSection nowShowing={nowShowing} comingSoon={comingSoon} />
+      <RecommendedCarousel movies={recommended} />
+      <BrowseByLanguage />
+      <BrowseByGenre />
+      <FeaturedTheatres theatres={theatres} />
+      <OffersSection offers={offers} />
+      <DownloadApp />
     </main>
   );
 }

@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    // Seeded picsum images are deterministic stand-ins for real poster/theatre
+    // artwork. Swap these patterns for your CDN / TMDB image host in production.
+    remotePatterns: [
+      { protocol: "https", hostname: "picsum.photos", pathname: "/**" },
+      { protocol: "https", hostname: "fastly.picsum.photos", pathname: "/**" },
+    ],
+  },
 };
 
 export default nextConfig;

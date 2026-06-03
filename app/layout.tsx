@@ -1,15 +1,31 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Toaster } from "sonner";
+
 import "./globals.css";
+import { SITE } from "@/lib/constants";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Display font for headings — paired with Geist for body copy.
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -17,18 +33,47 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Movie — Book tickets online",
-    template: "%s · Movie",
+    default: `${SITE.name} — Book movie tickets online`,
+    template: `%s · ${SITE.name}`,
   },
-  description:
-    "Discover the latest movie releases, pick your seats, and book tickets in seconds.",
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [
+    "movie tickets",
+    "book movies online",
+    "cinema near me",
+    "showtimes",
+    "theatres",
+    "IMAX",
+    "events",
+  ],
+  authors: [{ name: SITE.name }],
   openGraph: {
-    title: "Movie — Book tickets online",
-    description:
-      "Discover the latest movie releases, pick your seats, and book tickets in seconds.",
     type: "website",
+    siteName: SITE.name,
+    title: `${SITE.name} — Book movie tickets online`,
+    description: SITE.description,
     url: siteUrl,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE.name} — Book movie tickets online`,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+  alternates: { canonical: "/" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0c" },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({
@@ -39,9 +84,32 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {/* Skip link for keyboard / screen-reader users */}
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:ring-3 focus:ring-ring/50"
+          >
+            Skip to content
+          </a>
+          <SiteHeader />
+
+          {children}
+
+          <SiteFooter />
+
+          <Toaster position="bottom-center" richColors closeButton />
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
