@@ -46,16 +46,18 @@ export function CitySelector({ className }: { className?: string }) {
           className,
         )}
       >
-        <MapPin className="size-4 text-brand" aria-hidden />
+        <MapPin className="size-4 text-brand" />
+
         <span className="max-w-28 truncate">{city}</span>
+
         <ChevronDown
           className={cn(
             "size-4 text-muted-foreground transition-transform",
             open && "rotate-180",
           )}
-          aria-hidden
         />
       </PopoverTrigger>
+
       <PopoverContent align="end" className="w-80 p-0">
         <Command>
           <CommandInput placeholder="Search for your city" />

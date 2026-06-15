@@ -38,8 +38,8 @@ export function SiteHeader() {
         <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
           {PRIMARY_NAV.map((link) => (
             <Link
-              key={link.href}
               href={link.href}
+              key={link.href}
               className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
             >
               {link.label}
@@ -52,11 +52,13 @@ export function SiteHeader() {
         </div>
 
         <div className="ml-auto flex items-center gap-1 sm:gap-2 lg:ml-0">
-          <CitySelector className="hidden sm:block" />
+          <CitySelector className="hidden sm:flex" />
+
           <ThemeToggle />
+
           <Button
             variant="outline"
-            className="hidden h-9 sm:inline-flex"
+            className="bg-brand-gradient hidden h-9 border-0 text-brand-foreground shadow-md shadow-brand/25 md:inline-flex"
             asChild
           >
             <Link href="/sign-in">
@@ -64,12 +66,6 @@ export function SiteHeader() {
               <span className="hidden md:inline">Sign in</span>
               <span className="md:hidden">Login</span>
             </Link>
-          </Button>
-          <Button
-            className="bg-brand-gradient hidden h-9 border-0 text-brand-foreground shadow-md shadow-brand/25 md:inline-flex"
-            asChild
-          >
-            <Link href="/sign-up">Sign up</Link>
           </Button>
           <MobileNav />
         </div>

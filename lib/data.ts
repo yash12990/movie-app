@@ -1,9 +1,4 @@
-import type {
-  ComingSoonMovie,
-  Movie,
-  Offer,
-  Theatre,
-} from "@/lib/types";
+import type { ComingSoonMovie, Movie, Offer, Theatre } from "@/lib/types";
 
 /**
  * Deterministic image helpers.
@@ -12,8 +7,7 @@ import type {
  * shift, cacheable) while staying dependency-free. In production these helpers
  * would point at your image CDN / TMDB poster paths.
  */
-const poster = (seed: string) =>
-  `https://picsum.photos/seed/${seed}/480/720`;
+const poster = (seed: string) => `https://picsum.photos/seed/${seed}/480/720`;
 const backdrop = (seed: string) =>
   `https://picsum.photos/seed/${seed}/1920/1080`;
 const theatreImg = (seed: string) =>

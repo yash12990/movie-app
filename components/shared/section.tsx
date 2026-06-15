@@ -22,10 +22,7 @@ export function Section({
   ...props
 }: SectionProps) {
   return (
-    <section
-      className={cn(!flush && "py-12 sm:py-16", className)}
-      {...props}
-    >
+    <section className={cn(!flush && "py-12 sm:py-16", className)} {...props}>
       {contained ? <div className={CONTAINER}>{children}</div> : children}
     </section>
   );

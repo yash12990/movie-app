@@ -15,10 +15,10 @@ export const SITE = {
 } as const;
 
 export const PRIMARY_NAV: NavLink[] = [
-  { label: "Movies", href: "#now-showing" },
-  { label: "Theatres", href: "#theatres" },
-  { label: "Events", href: "#events" },
-  { label: "Offers", href: "#offers" },
+  { label: "Movies", href: "/#now-showing" },
+  { label: "Theatres", href: "/#theatres" },
+  { label: "Events", href: "/#events" },
+  { label: "Offers", href: "/#offers" },
 ];
 
 export const CITIES: City[] = [
