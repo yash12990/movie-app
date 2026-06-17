@@ -59,13 +59,26 @@ export function MobileNav() {
         </nav>
 
         <SheetFooter className="mt-auto p-0">
-          <Button variant="outline" className="h-10 w-full justify-center">
-            <LogIn className="size-4" />
-            Sign in
-          </Button>
-          <Button className="bg-brand-gradient h-10 w-full justify-center border-0 text-brand-foreground">
-            Sign up
-          </Button>
+          <SheetClose asChild>
+            <Button
+              asChild
+              variant="outline"
+              className="h-10 w-full justify-center"
+            >
+              <Link href="/sign-in">
+                <LogIn className="size-4" />
+                Sign in
+              </Link>
+            </Button>
+          </SheetClose>
+          <SheetClose asChild>
+            <Button
+              asChild
+              className="bg-brand-gradient h-10 w-full justify-center border-0 text-brand-foreground"
+            >
+              <Link href="/sign-up">Sign up</Link>
+            </Button>
+          </SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
